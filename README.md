@@ -54,8 +54,8 @@ A modern, mobile-first web application for generating professional vCard QR code
 
 ## Usage
 
-1. **Edit**: Fill in your First Name, Last Name, Job Title, and Contact Details.
-2. **Preview**: Switch to the "Preview" tab to see the final card design.
+1. **Edit**: Fill in your First Name, Last Name, Job Title, and Contact Details. Use the **Pencil Icon** to upload/change your photo.
+2. **Preview**: Switch to the "Preview" tab to see the final card design. You can also edit the photo directly here.
 3. **Export**: Click "Save Image" to download a high-resolution PNG or "Save PDF" for a document version.
 
 ## License

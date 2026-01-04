@@ -70,6 +70,15 @@ export const GeneratorView = () => {
                 </div>
             </header>
 
+            {/* Hidden File Input - Always Rendered */}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+            />
+
             {/* Content */}
             <div className="flex-1 overflow-y-auto no-scrollbar p-6">
 
@@ -119,13 +128,6 @@ export const GeneratorView = () => {
                                 >
                                     Change Photo
                                 </button>
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    className="hidden"
-                                    onChange={handleImageUpload}
-                                />
                             </div>
                         </div>
 

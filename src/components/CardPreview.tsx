@@ -85,9 +85,10 @@ export const CardPreview = ({ data, className, onEditImage }: CardPreviewProps) 
                     <div className="bg-white p-2 rounded-xl shadow-sm">
                         <QRCodeCanvas
                             value={vCardData}
-                            size={160}
+                            size={512} // High-res internal rendering (optimized)
                             level="M"
                             includeMargin={true}
+                            style={{ width: 160, height: 160 }} // Constraint for display
                         />
                     </div>
                     <div className="flex flex-col items-center">

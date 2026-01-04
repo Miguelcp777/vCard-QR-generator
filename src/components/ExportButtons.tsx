@@ -23,6 +23,7 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
             const dataUrl = await toPng(targetRef.current, {
                 cacheBust: true,
                 pixelRatio: 3, // High resolution (3x)
+                backgroundColor: "#ffffff",
             });
 
             const link = document.createElement("a");
@@ -47,18 +48,22 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
             const imgData = await toPng(targetRef.current, {
                 cacheBust: true,
                 pixelRatio: 3, // Match PNG quality
+                backgroundColor: "#ffffff",
             });
 
+            // Create temporary image to get dimensions
+            const img = new Image();
+            img.src = imgData;
+            await new Promise((resolve) => { img.onload = resolve; });
+
+            // Create PDF with exact image dimensions
             const pdf = new jsPDF({
                 orientation: "portrait",
-                unit: "mm",
+                unit: "px",
+                format: [img.width, img.height] // Set page size to image size
             });
 
-            const imgProps = pdf.getImageProperties(imgData);
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.addImage(imgData, "PNG", 0, 0, img.width, img.height);
             pdf.save(`${fileName}.pdf`);
         } catch (err) {
             console.error("PDF Export failed:", err);

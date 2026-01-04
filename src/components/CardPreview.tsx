@@ -25,18 +25,16 @@ export const CardPreview = ({ data, className, onEditImage }: CardPreviewProps) 
                     </h2>
                 </div>
 
-                {/* Overlapping Avatar Section - Robust Background Image methodology */}
+                {/* Overlapping Avatar Section - Helper for robust export */}
                 <div className="relative -mt-10 mb-6 group cursor-pointer shrink-0" onClick={onEditImage}>
-                    <div
-                        className="w-32 h-32 rounded-full border-[6px] border-white dark:border-card-dark shadow-md bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden"
-                        style={{
-                            backgroundImage: data.photoBase64 ? `url(${data.photoBase64})` : undefined,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat'
-                        }}
-                    >
-                        {!data.photoBase64 && (
+                    <div className="w-32 h-32 rounded-full border-[6px] border-white dark:border-card-dark shadow-md bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden relative">
+                        {data.photoBase64 ? (
+                            <img
+                                src={data.photoBase64}
+                                alt="Profile"
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
                             <span className="material-symbols-rounded text-4xl text-gray-400">person</span>
                         )}
                     </div>

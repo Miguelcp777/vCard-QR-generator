@@ -13,18 +13,29 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
     const [isExporting, setIsExporting] = useState(false);
 
     const handleDownloadPNG = async () => {
-        if (!targetRef.current) return;
+        if (!targetRef.current) {
+            alert("Export Error: Element not found. Please reload.");
+            return;
+        }
         setIsExporting(true);
 
         try {
             // Delay to ensure rendering (fonts, layout)
-            await new Promise(resolve => setTimeout(resolve, 500));
+            console.log("Starting export...");
+            await new Promise(resolve => setTimeout(resolve, 800));
 
+            // Get standard dimensions to force canvas size if needed, but rely on auto first.
             const dataUrl = await toPng(targetRef.current, {
-                cacheBust: true,
-                pixelRatio: 3, // High resolution (3x)
+                cacheBust: false,
+                pixelRatio: 2,
+                skipAutoScale: true, // Prevents internal cloning issues
                 backgroundColor: "#ffffff",
+                style: { background: "white" }
             });
+
+            if (!dataUrl || dataUrl.length < 100) {
+                throw new Error("Generated image is empty. Please try again.");
+            }
 
             const link = document.createElement("a");
             link.download = `${fileName}.png`;
@@ -32,7 +43,8 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
             link.click();
         } catch (err) {
             console.error("Export failed:", err);
-            alert(`Failed to export image. ${err instanceof Error ? err.message : String(err)}`);
+            // Detailed alert for user feedback
+            alert(`Error de exportación: ${err instanceof Error ? err.message : String(err)}. Intente recargar la página.`);
         } finally {
             setIsExporting(false);
         }
@@ -43,12 +55,14 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
         setIsExporting(true);
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 100));
+            await new Promise(resolve => setTimeout(resolve, 800));
 
             const imgData = await toPng(targetRef.current, {
-                cacheBust: true,
-                pixelRatio: 3, // Match PNG quality
+                cacheBust: false,
+                pixelRatio: 2,
+                skipAutoScale: true,
                 backgroundColor: "#ffffff",
+                style: { background: "white" }
             });
 
             // Create temporary image to get dimensions

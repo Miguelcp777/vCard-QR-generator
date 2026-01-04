@@ -84,12 +84,14 @@ export const GeneratorView = () => {
 
                 {viewMode === "preview" ? (
                     <div className="flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-                        {/* Capture Wrapper */}
-                        <div ref={captureRef} className="w-full flex justify-center p-4 bg-transparent">
-                            <CardPreview
-                                data={data}
-                                onEditImage={() => fileInputRef.current?.click()}
-                            />
+                        {/* Capture Wrapper - Constrained width to prevent massive canvas generation */}
+                        <div className="w-full flex justify-center p-4">
+                            <div ref={captureRef} className="w-full max-w-sm bg-transparent">
+                                <CardPreview
+                                    data={data}
+                                    onEditImage={() => fileInputRef.current?.click()}
+                                />
+                            </div>
                         </div>
 
                         {/* Export Buttons */}

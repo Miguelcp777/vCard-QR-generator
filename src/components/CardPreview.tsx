@@ -1,8 +1,11 @@
+import { /* useRef, useEffect */ } from "react"; // Removed useRef and useEffect as AvatarCanvas is removed
 import type { ContactData } from "../utils/vcard";
-import { QRCodeCanvas } from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react"; // Changed to SVG for better mobile export support
 import { Phone, Mail, Globe, MapPin, Scan, Edit2 } from "lucide-react";
 import clsx from "clsx";
 import { generateVCard } from "../utils/vcard";
+
+// Helper component removed - switching to CSS background implementation
 
 interface CardPreviewProps {
     data: ContactData;
@@ -18,21 +21,22 @@ export const CardPreview = ({ data, className, onEditImage }: CardPreviewProps) 
             <div className="bg-white dark:bg-card-dark rounded-[1.5rem] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col items-center border border-gray-100 dark:border-gray-700">
 
                 {/* Header Section */}
-                <div className="w-full bg-white dark:bg-card-dark pt-8 pb-12 px-6 flex justify-center relative">
-                    {/* J&J Logo Text */}
-                    <h2 className="text-3xl font-bold text-primary tracking-tight font-display text-center">
+                <div className="w-full bg-white dark:bg-card-dark pt-8 pb-12 px-4 sm:px-6 flex justify-center relative">
+                    {/* J&J Logo Text - Responsive sizing to prevent clipping on small mobiles */}
+                    <h2 className="text-2xl sm:text-3xl font-bold text-primary tracking-tight font-display text-center whitespace-nowrap">
                         Johnson<span className="font-normal">&</span>Johnson
                     </h2>
                 </div>
 
-                {/* Overlapping Avatar Section - Helper for robust export */}
+                {/* Overlapping Avatar Section - Optimized Image Tag (Robust) */}
                 <div className="relative -mt-10 mb-6 group cursor-pointer shrink-0" onClick={onEditImage}>
-                    <div className="w-32 h-32 rounded-full border-[6px] border-white dark:border-card-dark shadow-md bg-gray-200 shrink-0 flex items-center justify-center overflow-hidden relative">
+                    <div className="w-32 h-32 rounded-full border-[6px] border-white dark:border-card-dark shadow-md bg-gray-200 shrink-0 flex items-center justify-center relative overflow-hidden">
                         {data.photoBase64 ? (
                             <img
                                 src={data.photoBase64}
                                 alt="Profile"
                                 className="w-full h-full object-cover"
+                                loading="eager"
                             />
                         ) : (
                             <span className="material-symbols-rounded text-4xl text-gray-400">person</span>
@@ -81,12 +85,12 @@ export const CardPreview = ({ data, className, onEditImage }: CardPreviewProps) 
                 {/* Footer / QR Section */}
                 <div className="w-full bg-gray-50 dark:bg-gray-800/50 p-6 border-t border-gray-100 dark:border-gray-700/50 flex flex-col items-center gap-4 text-center">
                     <div className="bg-white p-2 rounded-xl shadow-sm">
-                        <QRCodeCanvas
+                        <QRCodeSVG
                             value={vCardData}
-                            size={512} // High-res internal rendering (optimized)
+                            size={512} // Internal size for high detail
                             level="M"
                             includeMargin={true}
-                            style={{ width: 160, height: 160 }} // Constraint for display
+                            style={{ width: 160, height: 160 }} // CSS display size
                         />
                     </div>
                     <div className="flex flex-col items-center">

@@ -20,15 +20,28 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
         setIsExporting(true);
 
         try {
-            // Delay to ensure rendering (fonts, layout)
             console.log("Starting export...");
-            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // 1. Force wait for all images/canvases
+            const images = targetRef.current.querySelectorAll("img");
+
+            // Simple wait for logic
+            await Promise.all([
+                ...Array.from(images).map(img => {
+                    if (img.complete) return Promise.resolve();
+                    return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                }),
+                // Allow canvases time to paint
+                new Promise(resolve => setTimeout(resolve, 500))
+            ]);
+
+            // 2. Extra safety delay for mobile rendering/decoding
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             // Get standard dimensions to force canvas size if needed, but rely on auto first.
             const dataUrl = await toPng(targetRef.current, {
                 cacheBust: false,
                 pixelRatio: 2,
-                skipAutoScale: true, // Prevents internal cloning issues
                 backgroundColor: "#ffffff",
                 style: { background: "white" }
             });
@@ -55,12 +68,20 @@ export const ExportButtons = ({ targetRef, fileName = "business-card" }: ExportB
         setIsExporting(true);
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 800));
+            const images = targetRef.current.querySelectorAll("img");
+            await Promise.all(Array.from(images).map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise(resolve => {
+                    img.onload = resolve;
+                    img.onerror = resolve;
+                });
+            }));
+
+            await new Promise(resolve => setTimeout(resolve, 2500));
 
             const imgData = await toPng(targetRef.current, {
                 cacheBust: false,
                 pixelRatio: 2,
-                skipAutoScale: true,
                 backgroundColor: "#ffffff",
                 style: { background: "white" }
             });

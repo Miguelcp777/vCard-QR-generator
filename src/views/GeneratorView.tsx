@@ -122,26 +122,31 @@ export const GeneratorView = () => {
             <div className="flex-1 overflow-y-auto no-scrollbar">
 
                 {viewMode === "preview" ? (
-                    <div className="flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10 pt-6">
-                        {/* Capture Wrapper - Constrained width to prevent massive canvas generation */}
-                        <div className="w-full flex justify-center p-4">
-                            <div ref={captureRef} className="w-full max-w-sm bg-transparent">
-                                <CardPreview
-                                    data={data}
-                                    onEditImage={() => fileInputRef.current?.click()}
-                                />
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {/* Main Preview Frame - Matching Edit Mode */}
+                        <div className="bg-white/90 dark:bg-card-dark backdrop-blur-sm shadow-xl border border-white/50 dark:border-gray-700 mx-4 sm:mx-6 rounded-b-3xl p-5 sm:p-6 mb-6 flex flex-col items-center gap-6">
+                            {/* Capture Wrapper - Constrained width to prevent massive canvas generation */}
+                            <div className="w-full flex justify-center p-4">
+                                <div ref={captureRef} className="w-full max-w-sm bg-transparent">
+                                    <CardPreview
+                                        data={data}
+                                        onEditImage={() => fileInputRef.current?.click()}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Export Buttons */}
-                        <div className="w-full px-6">
-                            <ExportButtons targetRef={captureRef} fileName={`JNJ_Card_${data.firstName || 'Contact'}`} />
-                        </div>
+                            {/* Export Buttons */}
+                            <div className="w-full px-6 flex justify-center">
+                                <div className="w-full max-w-md">
+                                    <ExportButtons targetRef={captureRef} fileName={`JNJ_Card_${data.firstName || 'Contact'}`} />
+                                </div>
+                            </div>
 
-                        <p className="text-xs text-center text-gray-400 max-w-xs mt-4">
-                            This is how your card will appear on a mobile device.
-                            <button className="text-primary font-medium ml-1" onClick={() => setViewMode("edit")}>Make changes</button>
-                        </p>
+                            <p className="text-xs text-center text-gray-400 max-w-xs mt-4">
+                                This is how your card will appear on a mobile device.
+                                <button className="text-primary font-medium ml-1" onClick={() => setViewMode("edit")}>Make changes</button>
+                            </p>
+                        </div>
                     </div>
                 ) : (
                     <div className="animate-in fade-in slide-in-from-left-4 duration-300">
